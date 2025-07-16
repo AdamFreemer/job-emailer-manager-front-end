@@ -1,23 +1,15 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Container, Loader, Text, Stack } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { api } from '@/lib/api'
 
-export default function CallbackPage() {
+function CallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const hasRun = useRef(false)
-
-  useEffect(() => {
-    // Prevent double execution in React StrictMode
-    if (hasRun.current) return
-    hasRun.current = true
-    
-    handleCallback()
-  }, [])
 
   const handleCallback = async () => {
     const code = searchParams.get('code')
@@ -63,6 +55,14 @@ export default function CallbackPage() {
     }
   }
 
+  useEffect(() => {
+    // Prevent double execution in React StrictMode
+    if (hasRun.current) return
+    hasRun.current = true
+    
+    handleCallback()
+  }, [handleCallback])
+
   return (
     <Container size="sm" py="xl">
       <Stack align="center" gap="md" mt={100}>
@@ -70,5 +70,20 @@ export default function CallbackPage() {
         <Text size="lg">Completing authentication...</Text>
       </Stack>
     </Container>
+  )
+}
+
+export default function CallbackPage() {
+  return (
+    <Suspense fallback={
+      <Container size="sm" py="xl">
+        <Stack align="center" gap="md" mt={100}>
+          <Loader size="lg" />
+          <Text size="lg">Loading...</Text>
+        </Stack>
+      </Container>
+    }>
+      <CallbackContent />
+    </Suspense>
   )
 }
