@@ -32,6 +32,9 @@ function CallbackContent() {
       })
 
       const { access_token, refresh_token, user } = response.data
+      
+      console.log('OAuth callback response:', response.data)
+      console.log('Access token:', access_token)
 
       // Store tokens
       localStorage.setItem('access_token', access_token)
@@ -43,7 +46,10 @@ function CallbackContent() {
         color: 'green',
       })
 
-      router.push('/dashboard')
+      // Small delay to ensure tokens are stored
+      setTimeout(() => {
+        router.push('/dashboard')
+      }, 100)
     } catch (error) {
       console.error('Authentication failed:', error)
       notifications.show({
