@@ -1,5 +1,5 @@
 import { Group, Button, Text, Avatar } from '@mantine/core'
-import { IconLogout, IconSettings } from '@tabler/icons-react'
+import { IconLogout, IconSettings, IconMail } from '@tabler/icons-react'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import { notifications } from '@mantine/notifications'
@@ -43,6 +43,13 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
       </div>
       
       <Group>
+        <Button
+          variant="subtle"
+          leftSection={<IconMail size={16} />}
+          onClick={() => router.push('/emails')}
+        >
+          Emails
+        </Button>
         <Button
           variant="subtle"
           leftSection={<IconSettings size={16} />}
