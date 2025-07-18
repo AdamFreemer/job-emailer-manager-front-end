@@ -11,10 +11,9 @@ interface Email {
   id: number
   subject: string
   sender: string
-  sender_email: string
-  date_received: string
-  status: string
-  is_job_related: boolean | null
+  received_at: string
+  category: string | null
+  sub_category: string | null
   has_application: boolean
 }
 
@@ -81,13 +80,21 @@ export default function EmailsPage() {
     })
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'UNREAD': return 'blue'
-      case 'READ': return 'gray'
-      case 'PROCESSED': return 'green'
-      case 'IGNORED': return 'red'
+  const getCategoryColor = (category: string | null) => {
+    switch (category) {
+      case 'PROSPECT_SINGLE': return 'blue'
+      case 'JOB_LINK_LIST': return 'green'
+      case 'APPLICATION_RESPONSE': return 'yellow'
       default: return 'gray'
+    }
+  }
+  
+  const getCategoryLabel = (category: string | null) => {
+    switch (category) {
+      case 'PROSPECT_SINGLE': return 'Single Prospect'
+      case 'JOB_LINK_LIST': return 'Job List'
+      case 'APPLICATION_RESPONSE': return 'Response'
+      default: return 'Unclassified'
     }
   }
 
@@ -136,14 +143,9 @@ export default function EmailsPage() {
                 <Group justify="space-between" align="flex-start">
                   <div style={{ flex: 1 }}>
                     <Group gap="sm" mb="xs">
-                      <Badge color={getStatusColor(email.status)} size="sm">
-                        {email.status}
+                      <Badge color={getCategoryColor(email.category)} size="sm">
+                        {getCategoryLabel(email.category)}
                       </Badge>
-                      {email.is_job_related && (
-                        <Badge color="green" variant="light" size="sm">
-                          Job Related
-                        </Badge>
-                      )}
                       {email.has_application && (
                         <Badge color="blue" variant="light" size="sm">
                           <IconCheck size={12} /> Application Created
@@ -161,11 +163,11 @@ export default function EmailsPage() {
                     </Group>
                     
                     <Text size="xs" c="dimmed" mt="xs">
-                      {new Date(email.date_received).toLocaleString()}
+                      {new Date(email.received_at).toLocaleString()}
                     </Text>
                   </div>
                   
-                  {!email.has_application && email.is_job_related !== false && (
+                  {!email.has_application && (
                     <Button
                       size="xs"
                       variant="light"
