@@ -126,7 +126,7 @@ export default function EmailsPage() {
             <IconMail size={48} stroke={1.5} style={{ opacity: 0.5 }} />
             <Text size="lg" fw={500} mt="md">No emails yet</Text>
             <Text size="sm" c="dimmed" mt="xs">
-              Click "Sync Gmail" to fetch your recent job-related emails
+              Click &quot;Sync Gmail&quot; to fetch your recent job-related emails
             </Text>
           </Card>
         ) : (
